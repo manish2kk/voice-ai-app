@@ -1,6 +1,5 @@
 # voice-ai-app
 
-
 🎙️ Voice AI App
 
 ### Convert Text to Speech | Noise Removal | Voice Change
@@ -12,10 +11,22 @@ Voice AI App is a powerful tool that allows users to **convert text into speech*
 ## 🌟 Features
 
 ✅ **Text-to-Speech (TTS)** – Converts written text into natural-sounding speech.
-✅ **Noise Removal** – Filters out background noise for crystal-clear audio.
-✅ **Voice Modification** – Change pitch, speed, and tone to customize voices.
 
-## 🛠️ Technologies Used
+✅ **Voice Change** – Change your voice with a model voice.
+
+✅ **Noise Removal** – Filters out background noise for crystal-clear studio level audio.
+
+✅ **Voice Dub** – Change the language in the speech.
+
+✅ **Accent change** – Change the accent in the speech.
+
+✅ **Background music generation** – Create ambient music tracks
+
+✅ **Sound effects** –Generate various sound effects
+
+
+
+🛠️ Technologies Used
 
 - **Frontend:** React.js
 - **Backend:** Python (Flask/FastAPI)
