@@ -1,2 +1,5 @@
-# Ignore a folder
+*.pyc
+__pycache__/
+.env
+.DS_Store
 zdont_upload/
