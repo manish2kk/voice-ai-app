@@ -3,6 +3,7 @@
 ## 1. System Architecture Overview
 
 ### High-Level Architecture
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Web Client    │    │  Mobile Client  │    │  Developer API  │
@@ -39,12 +40,14 @@
 ### Technology Stack
 
 **Frontend:**
+
 - Web: React 18 + TypeScript + Vite + TailwindCSS
 - Mobile: React Native + TypeScript
 - State Management: Redux Toolkit + RTK Query
 - Audio Processing: Web Audio API, React Native Audio
 
 **Backend:**
+
 - API Server: Node.js + Express + TypeScript
 - AI Services: Python + FastAPI + PyTorch
 - Database: PostgreSQL 15+ with connection pooling
@@ -53,6 +56,7 @@
 - File Storage: AWS S3 / MinIO (self-hosted option)
 
 **Infrastructure:**
+
 - Containerization: Docker + Docker Compose
 - Orchestration: Kubernetes (Production)
 - Load Balancer: NGINX
@@ -63,6 +67,7 @@
 ## 2. Detailed System Design
 
 ### 2.1 Authentication & Authorization Flow
+
 ```
 Client → API Gateway → Auth Service → JWT Validation → Resource Access
                    ↓
@@ -72,6 +77,7 @@ Client → API Gateway → Auth Service → JWT Validation → Resource Access
 ```
 
 ### 2.2 AI Processing Pipeline
+
 ```
 Audio Input → Pre-processing → Model Selection → AI Processing → Post-processing → Output
      ↓              ↓               ↓               ↓              ↓           ↓
@@ -79,6 +85,7 @@ File Upload → Validation → Queue Job → GPU Worker → Quality Check → St
 ```
 
 ### 2.3 Payment & Usage Tracking
+
 ```
 User Action → Usage Counter → Threshold Check → Payment Gate → Download
      ↓             ↓              ↓              ↓            ↓
@@ -90,6 +97,7 @@ Experiment → Track Minutes → Block if Exceeded → Process Payment → Deliv
 ### Core Tables
 
 **users**
+
 ```sql
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -108,6 +116,7 @@ CREATE TABLE users (
 ```
 
 **voice_library**
+
 ```sql
 CREATE TABLE voice_library (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -124,6 +133,7 @@ CREATE TABLE voice_library (
 ```
 
 **processing_jobs**
+
 ```sql
 CREATE TABLE processing_jobs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -143,6 +153,7 @@ CREATE TABLE processing_jobs (
 ```
 
 **payments**
+
 ```sql
 CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -158,6 +169,7 @@ CREATE TABLE payments (
 ```
 
 **usage_tracking**
+
 ```sql
 CREATE TABLE usage_tracking (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -337,6 +349,7 @@ genai-voice-platform/
 ## 5. API Design
 
 ### 5.1 Authentication Endpoints
+
 ```typescript
 POST /api/auth/register
 POST /api/auth/login
@@ -348,6 +361,7 @@ GET  /api/auth/verify-email/:token
 ```
 
 ### 5.2 Audio Processing Endpoints
+
 ```typescript
 // Text to Speech
 POST /api/audio/tts
@@ -440,7 +454,7 @@ POST /api/audio/generate-sfx
   "model": "sfx_gen_v1"
 }
 
-// Mood Music for Social Media
+// Status Mood Music for Social Media
 POST /api/audio/mood-music
 {
   "mood": "energetic",
@@ -451,6 +465,7 @@ POST /api/audio/mood-music
 ```
 
 ### 5.3 Job Management
+
 ```typescript
 GET  /api/jobs/:id/status
 GET  /api/jobs/:id/progress
@@ -459,6 +474,7 @@ GET  /api/jobs/history
 ```
 
 ### 5.4 Payment & Credits
+
 ```typescript
 GET  /api/user/credits
 POST /api/payment/create-intent
@@ -468,6 +484,7 @@ POST /api/audio/download/:job_id  // Consumes credits
 ```
 
 ### 5.5 Voice Library
+
 ```typescript
 GET    /api/voices/library
 POST   /api/voices/upload
@@ -476,6 +493,7 @@ GET    /api/voices/public
 ```
 
 ### 5.6 Developer API
+
 ```typescript
 GET    /api/developer/api-keys
 POST   /api/developer/api-keys
@@ -486,6 +504,7 @@ GET    /api/developer/usage
 ## 6. Security Implementation
 
 ### 6.1 Authentication & Authorization
+
 - JWT tokens with short expiry (15 minutes)
 - Refresh tokens stored in httpOnly cookies
 - Role-based access control (RBAC)
@@ -493,6 +512,7 @@ GET    /api/developer/usage
 - API key authentication for developer access
 
 ### 6.2 Input Validation & Sanitization
+
 ```typescript
 // Input validation middleware
 export const validateAudioUpload = [
@@ -522,6 +542,7 @@ const validateAudioFile = (req: Request, res: Response, next: NextFunction) => {
 ```
 
 ### 6.3 Rate Limiting
+
 ```typescript
 // Different limits for different endpoints
 const rateLimiters = {
@@ -547,6 +568,7 @@ const rateLimiters = {
 ```
 
 ### 6.4 Security Headers & HTTPS
+
 ```typescript
 // Security middleware
 app.use(helmet({
@@ -576,6 +598,7 @@ app.use(cors({
 ```
 
 ### 6.5 Data Protection
+
 - Encryption at rest for sensitive data
 - TLS 1.3 for data in transit
 - Regular security audits and penetration testing
@@ -585,6 +608,7 @@ app.use(cors({
 ## 7. Payment Integration
 
 ### 7.1 Payment Providers
+
 ```typescript
 // Multi-provider payment service
 class PaymentService {
@@ -610,6 +634,7 @@ class PaymentService {
 ```
 
 ### 7.2 Credit System
+
 ```typescript
 interface CreditPackage {
   id: string;
@@ -630,6 +655,7 @@ const CREDIT_PACKAGES: CreditPackage[] = [
 ## 8. DevOps & Deployment
 
 ### 8.1 Environment Configuration
+
 ```yaml
 # docker-compose.dev.yml
 version: '3.8'
@@ -668,6 +694,7 @@ volumes:
 ```
 
 ### 8.2 CI/CD Pipeline
+
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy to Production
@@ -698,7 +725,7 @@ jobs:
         run: |
           docker build -t genai-voice/api:${{ github.sha }} ./services/core-backend
           docker build -t genai-voice/ai:${{ github.sha }} ./services/ai-processing
-      
+    
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/api api=genai-voice/api:${{ github.sha }}
@@ -706,6 +733,7 @@ jobs:
 ```
 
 ### 8.3 Monitoring & Logging
+
 ```typescript
 // Structured logging
 import winston from 'winston';
@@ -753,6 +781,7 @@ const metrics = {
 ## 9. Performance Optimization
 
 ### 9.1 Caching Strategy
+
 ```typescript
 // Multi-level caching
 class CacheService {
@@ -782,6 +811,7 @@ class CacheService {
 ```
 
 ### 9.2 Database Optimization
+
 ```sql
 -- Indexes for performance
 CREATE INDEX idx_users_email ON users(email);
@@ -795,6 +825,7 @@ CREATE TABLE processing_jobs_2025_01 PARTITION OF processing_jobs
 ```
 
 ### 9.3 File Handling & CDN
+
 ```typescript
 // Streaming file uploads
 import multer from 'multer';
@@ -822,6 +853,7 @@ const generateSignedUrl = async (key: string) => {
 ## 10. Testing Strategy
 
 ### 10.1 Test Structure
+
 ```
 tests/
 ├── unit/
@@ -840,6 +872,7 @@ tests/
 ```
 
 ### 10.2 Test Implementation
+
 ```typescript
 // Unit test example
 describe('AudioService', () => {
@@ -856,7 +889,7 @@ describe('AudioService', () => {
         model: 'tacotron2',
         voice_id: 'test-voice'
       });
-      
+    
       expect(result.success).toBe(true);
       expect(result.audioUrl).toBeDefined();
       expect(result.duration).toBeGreaterThan(0);
@@ -874,7 +907,7 @@ describe('Audio API Endpoints', () => {
         text: 'Test speech',
         model: 'tacotron2'
       });
-    
+  
     expect(response.status).toBe(202);
     expect(response.body.jobId).toBeDefined();
   });
@@ -884,12 +917,14 @@ describe('Audio API Endpoints', () => {
 ## 11. Scalability Considerations
 
 ### 11.1 Horizontal Scaling
+
 - Load balancing across multiple API instances
 - Queue-based job processing with worker scaling
 - Database read replicas for query distribution
 - CDN for global content delivery
 
 ### 11.2 Resource Management
+
 ```typescript
 // GPU resource management
 class GPUManager {
