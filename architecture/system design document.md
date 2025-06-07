@@ -192,7 +192,7 @@ genai-voice-platform/
 ├── docker-compose.dev.yml
 ├── .env.example
 ├── .gitignore
-└── services/
+└── src/
     ├── web-client/                    # React Web Application
     │   ├── public/
     │   ├── src/
@@ -289,7 +289,7 @@ genai-voice-platform/
     │   ├── package.json
     │   └── Dockerfile
     │
-    ├── ai-processing/                 # Python AI Services
+    ├── ai-services/                 # Python AI Services
     │   ├── src/
     │   │   ├── models/
     │   │   │   ├── tts/
@@ -725,7 +725,7 @@ jobs:
         run: |
           docker build -t genai-voice/api:${{ github.sha }} ./services/core-backend
           docker build -t genai-voice/ai:${{ github.sha }} ./services/ai-processing
-    
+  
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/api api=genai-voice/api:${{ github.sha }}
@@ -889,7 +889,7 @@ describe('AudioService', () => {
         model: 'tacotron2',
         voice_id: 'test-voice'
       });
-    
+  
       expect(result.success).toBe(true);
       expect(result.audioUrl).toBeDefined();
       expect(result.duration).toBeGreaterThan(0);
