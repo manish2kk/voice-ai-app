@@ -20,11 +20,15 @@ Voice AI App is a powerful tool that allows users to **convert text into speech*
 
 ✅ **Voice Dub** – Change the language in the speech.
 
+✅ **Voice Edit** – Remove bloopers and mute any given words in speech
+
 ✅ **Accent change** – Change the accent in the speech.
 
 ✅ **Background music generation** – Create ambient music tracks
 
 ✅ **Sound effects** –Generate various sound effects
+
+✅ **Status Music generation** – Music for whatsapp or instagram status. Based on mood, feeling, season, occation.
 
 🛠️ Technologies Used
 
@@ -35,6 +39,16 @@ Voice AI App is a powerful tool that allows users to **convert text into speech*
   - Google TTS / Amazon Polly for text-to-speech
   - Librosa & Pydub for audio processing
 
+## Architecture Overview:
+
+* **API Gateway:** Single entry point, handles routing and basic JWT authentication.
+* **User Management Service:** Manages user registration, login,and profile.
+* **Payment Service:** Simulates payment processing and minute deduction/addition.
+* **Storage Service:** Simulates file storage (locally on disk in a `data/` folder).
+* **Audio Processing Orchestrator Service:** Dispatches audio processing jobs to various AI worker services.
+* **GenAI Worker Services (TTS, STT, Noise Removal etc):** Individual microservices that simulate AI model inference.
+* **Notification Service:** Simulates sending notifications.
+
 ## 🏗️ Setup & Installation
 
 ### Clone the repository
@@ -44,25 +58,7 @@ git clone https://github.com/manish2kk/voice-ai-app.git
 cd voice-ai-app
 ```
 
-### Install dependencies
-
-#### 🖥️ Backend (Python)
-
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
-```
-
-#### 🖥️ Frontend (React)
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-## 📌 Usage
+### 📌 Usage
 
 1️⃣ **Enter text** in the provided input field.
 2️⃣ **Select voice options** (pitch, speed, noise filtering).
@@ -81,34 +77,6 @@ git push origin new-feature
 ```
 
 Then, create a **pull request** on GitHub.
-
-## 📜 License
-
-This project is licensed under **MIT License** – feel free to use, modify, and distribute.
-
-# GenAI Web + Mobile App Backend (Dummy Implementation)
-
-This repository contains a dummy backend implementation for a GenAI web and mobile application, following a microservices architecture. It demonstrates the high-level interactions between services for various audio processing capabilities.
-
-**IMPORTANT:** This is a **simplified and dummy** implementation for demonstration and development purposes. It uses in-memory storage instead of databases, direct HTTP calls instead of message queues,and simulated AI processing with dummy audio files. **DO NOT use this code in a production environment as-is.**
-
-## Capabilities Implemented (Dummy):
-
-1. **Convert text to speech (TTS)** - (simulated with `gen-ai-worker-tts-service`)
-2. **Convert speech to text (STT)** - (simulated with `gen-ai-worker-stt-service`)
-3. **Remove noise from voice** - (simulated with `gen-ai-worker-noise-removal-service`)
-
-   *(Other capabilities are outlined in the design but not implemented in this dummy code)*
-
-## Architecture Overview:
-
-* **API Gateway:** Single entry point, handles routing and basic JWT authentication.
-* **User Management Service:** Manages user registration, login,and profile.
-* **Payment Service:** Simulates payment processing and minute deduction/addition.
-* **Storage Service:** Simulates file storage (locally on disk in a `data/` folder).
-* **Audio Processing Orchestrator Service:** Dispatches audio processing jobs to various AI worker services.
-* **GenAI Worker Services (TTS, STT, Noise Removal):** Individual microservices that simulate AI model inference.
-* **Notification Service:** Simulates sending notifications.
 
 ## Getting Started
 
@@ -301,6 +269,6 @@ print(encoded_string)
     * You will receive `audio_b64` which is the base64 encoded `dummy_output.wav` file.
     * **Verify minutes:** Check `GET /api/users/account-status` again; you should see your `minutes_remaining` reduced.
 
----
+## 📜 License
 
-This should be a solid foundation! Let me know if you want to tweak anything. 🚀🎧
+This project is licensed under **MIT License** – feel free to use, modify, and distribute.
