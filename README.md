@@ -150,6 +150,7 @@ Follow these steps to set up and run the backend services locally using Docker C
      ```bash
 
      docker compose -f infra/docker-compose.yml build --no-cache
+     docker compose -f infra/docker-compose.yml up --build --force-recreate --no-cache
 
      ```
    * This command will:

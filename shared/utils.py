@@ -3,6 +3,9 @@ import jwt
 import os
 from datetime import datetime, timedelta
 import uuid
+import base64
+import time
+from typing import Optional, Dict, Any, List # <--- ADD THIS LINE
 
 # In a real application, keep this secret secure (e.g., environment variable)
 SECRET_KEY = "your-super-secret-key" # CHANGE THIS IN PRODUCTION
