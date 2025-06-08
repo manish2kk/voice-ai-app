@@ -12,6 +12,8 @@ Voice AI App is a powerful tool that allows users to **convert text into speech*
 
 ✅ **Text-to-Speech (TTS)** – Converts written text into natural-sounding speech.
 
+✅ **Speech-to-Text (STT)** – Converts speech to written text.
+
 ✅ **Voice Change** – Change your voice with a model voice.
 
 ✅ **Noise Removal** – Filters out background noise for crystal-clear studio level audio.
