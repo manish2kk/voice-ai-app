@@ -1,0 +1,129 @@
+services:
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: ./services/api-gateway/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # These environment variables are NOT used by the current API Gateway code,
+      # as services are hardcoded in src/main.py.
+      # They are kept here for potential future use with dynamic discovery.
+      - SERVICE_URLS={"user_management":"http://user-management-service:8001","payment":"http://payment-service:8002","storage":"http://storage-service:8003","orchestrator":"http://audio-processing-orchestrator-service:8004","tts_worker":"http://gen-ai-worker-tts-service:8005","stt_worker":"http://gen-ai-worker-stt-service:8006","noise_removal_worker":"http://gen-ai-worker-noise-removal-service:8007","notification":"http://notification-service:8008"}
+    
+    depends_on:
+      - user-management-service
+      - payment-service
+      - storage-service
+      - audio-processing-orchestrator-service
+      - gen-ai-worker-tts-service
+      - gen-ai-worker-stt-service
+      - gen-ai-worker-noise-removal-service
+      - notification-service
+    # Restart policy to ensure services come up reliably
+    restart: on-failure
+
+  user-management-service:
+    build:
+      context: ..
+      dockerfile: ./services/user-management-service/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1 # Important for seeing logs in real-time
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8001
+    restart: on-failure
+
+  payment-service:
+    build:
+      context: ..
+      dockerfile: ./services/payment-service/Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8002
+    depends_on:
+      - user-management-service # Payment service needs to update user minutes
+      - notification-service # Payment service needs to send notifications
+    restart: on-failure
+
+  storage-service:
+    build:
+      context: ..
+      dockerfile: ./services/storage-service/Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount a local directory to persist dummy audio files
+      - ./storage_data:/app/data # Create a 'storage_data' folder next to docker-compose.yml
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8003
+    restart: on-failure
+
+  audio-processing-orchestrator-service:
+    build:
+      context: ..
+      dockerfile: ./services/audio-processing-orchestrator-service/Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8004
+    depends_on:
+      - user-management-service
+      - payment-service
+      - storage-service
+      - gen-ai-worker-tts-service
+      - gen-ai-worker-stt-service
+      - gen-ai-worker-noise-removal-service
+      - notification-service
+    restart: on-failure
+
+  gen-ai-worker-tts-service:
+    build:
+      context: ..
+      dockerfile: ./services/gen-ai-worker-tts-service/Dockerfile
+    ports:
+      - "8005:8005"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8005
+    restart: on-failure
+
+  gen-ai-worker-stt-service:
+    build:
+      context: ..
+      dockerfile: ./services/gen-ai-worker-stt-service/Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8006
+    restart: on-failure
+
+  gen-ai-worker-noise-removal-service:
+    build:
+      context: ..
+      dockerfile: ./services/gen-ai-worker-noise-removal-service/Dockerfile
+    ports:
+      - "8007:8007"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8007
+    restart: on-failure
+
+  notification-service:
+    build:
+      context: ..
+      dockerfile: ./services/notification-service/Dockerfile
+    ports:
+      - "8008:8008"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8008
+    restart: on-failure
+
+volumes:
+  storage_data: # Define a named volume for storage service persistence

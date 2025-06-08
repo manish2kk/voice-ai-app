@@ -1,0 +1,5 @@
+fastapi==0.111.0
+uvicorn==0.30.1
+PyJWT==2.8.0
+passlib[bcrypt]==1.7.4 # For password hashing
+pydantic==2.7.4
